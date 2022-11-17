@@ -21,6 +21,10 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   Button,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useState } from 'react';
@@ -140,7 +144,7 @@ export default function MatchFinder() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Drawer
+      {/* <Drawer
         isOpen={isDrawerOpen}
         size="md"
         onClose={closeDrawer}
@@ -164,17 +168,34 @@ export default function MatchFinder() {
             <NeonButton onClick={handleFindClick}>Find Match</NeonButton>
           </DrawerFooter>
         </DrawerContent>
-      </Drawer>
-      <NeonButton onClick={handleMatchFinderClick}>
-        <Flex alignItems={'center'}>
-          <Box>{isSearching ? 'FINDING MATCH' : 'PLAY PONG'}</Box>
-          {isSearching && (
-            <Box px={4}>
-              <Spinner />
-            </Box>
-          )}
-        </Flex>
-      </NeonButton>
+      </Drawer> */}
+      <Popover placement='bottom'>
+        <PopoverTrigger>
+          <NeonButton>
+              <Flex alignItems={'center'}>
+                <Box>{isSearching ? 'FINDING MATCH' : 'PLAY PONG'}</Box>
+                {isSearching && (
+                  <Box px={4}>
+                    <Spinner />
+                  </Box>
+                )}
+              </Flex>
+          </NeonButton>
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverBody>
+            <RadioGroup
+                defaultValue={matchType}
+                onChange={handleMatchTypeChange}
+              >
+              <Stack mb="4">
+                <Radio value={'TURBO'}>TURBO PONG 2.0</Radio>
+                <Radio value={'CLASSIC'}>Classic</Radio>
+              </Stack>
+            </RadioGroup>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
