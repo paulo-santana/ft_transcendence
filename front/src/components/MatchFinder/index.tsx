@@ -25,6 +25,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
+  PopoverFooter,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useState } from 'react';
@@ -57,6 +58,11 @@ export default function MatchFinder() {
     onOpen: openAlert,
     onClose: closeAlert,
   } = useDisclosure();
+  const {
+    isOpen: isPopoverOpen,
+    onOpen: openPopover,
+    onClose: closePopover,
+  } = useDisclosure();
 
   const stopFinding = () => {
     api.stopFindingMatch();
@@ -69,7 +75,7 @@ export default function MatchFinder() {
     if (isSearching) {
       stopFinding();
     } else {
-      openDrawer();
+      openPopover();
     }
   };
 
@@ -103,7 +109,7 @@ export default function MatchFinder() {
       setIsSearching(false);
     }
 
-    closeDrawer();
+    closePopover();
   };
 
   const handleAcceptMatch = () => {
@@ -169,31 +175,39 @@ export default function MatchFinder() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer> */}
-      <Popover placement='bottom'>
+      <Popover
+        placement={"top"}
+        isOpen={isPopoverOpen}
+        onClose={closePopover}
+        onOpen={openPopover}
+      >
         <PopoverTrigger>
-          <NeonButton>
-              <Flex alignItems={'center'}>
-                <Box>{isSearching ? 'FINDING MATCH' : 'PLAY PONG'}</Box>
-                {isSearching && (
-                  <Box px={4}>
-                    <Spinner />
-                  </Box>
-                )}
-              </Flex>
+          <NeonButton onClick={handleMatchFinderClick}>
+            <Flex alignItems={'center'}>
+              <Box>{isSearching ? 'FINDING MATCH' : 'PLAY PONG'}</Box>
+              {isSearching && (
+                <Box px={4}>
+                  <Spinner />
+                </Box>
+              )}
+            </Flex>
           </NeonButton>
         </PopoverTrigger>
         <PopoverContent>
           <PopoverBody>
             <RadioGroup
-                defaultValue={matchType}
-                onChange={handleMatchTypeChange}
-              >
+              defaultValue={matchType}
+              onChange={handleMatchTypeChange}
+            >
               <Stack mb="4">
                 <Radio value={'TURBO'}>TURBO PONG 2.0</Radio>
                 <Radio value={'CLASSIC'}>Classic</Radio>
               </Stack>
             </RadioGroup>
           </PopoverBody>
+          <PopoverFooter justifyContent={'center'}>
+            <NeonButton onClick={handleFindClick}>Find Match</NeonButton>
+          </PopoverFooter>
         </PopoverContent>
       </Popover>
     </div>
