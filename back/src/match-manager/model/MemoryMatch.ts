@@ -161,10 +161,4 @@ export class MemoryMatch {
     const y = (Math.random() - 0.5) * rules.worldHeight;
     return new Vector(x, y).normalize().mult(rules.ball.startingSpeed);
   }
-
-  // private increaseBallSpeed() {
-  //   if (this.ball.speed < rules.ball.maxSpeed) {
-  //     this.ball.speed += 50;
-  //   }
-  // }
 }
