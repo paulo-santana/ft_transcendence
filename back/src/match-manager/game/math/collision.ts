@@ -52,9 +52,16 @@ export function handleBallRightPaddleCollision(ball: Ball, player: Paddle) {
     }
     ball.position.x -= penetrationDepth;
     ball.velocity.x *= -1;
+    const perturbation = ((Math.random() * 30 - 15) * Math.PI) / 180;
+    if (!needsClamping(ball.velocity.heading() + perturbation))
+      ball.velocity.rotate(perturbation);
     increaseBallSpeed(ball);
   }
 }
+
+const needsClamping = (angle): boolean => {
+  return (angle > 60 && angle < 120) || (angle > 240 && angle < 300);
+};
 
 function increaseBallSpeed(ball: Ball) {
   const speed = ball.velocity.mag();
