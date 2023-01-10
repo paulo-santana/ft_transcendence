@@ -1,6 +1,7 @@
 import { Ball } from '../model/Ball';
 import { GameRules } from '../rules';
 import { Paddle } from '../model/Paddle';
+import { radToDeg } from 'src/utils/functions/math';
 
 export function checkBallGoalCollision(ball: Ball, rules: GameRules): boolean {
   if (
@@ -55,11 +56,13 @@ export function handleBallRightPaddleCollision(ball: Ball, player: Paddle) {
     const perturbation = ((Math.random() * 30 - 15) * Math.PI) / 180;
     if (!needsClamping(ball.velocity.heading() + perturbation))
       ball.velocity.rotate(perturbation);
+
     increaseBallSpeed(ball);
   }
 }
 
-const needsClamping = (angle): boolean => {
+const needsClamping = (angle: number): boolean => {
+  angle = radToDeg(angle);
   return (angle > 60 && angle < 120) || (angle > 240 && angle < 300);
 };
 
