@@ -25,8 +25,10 @@ import { MatchManagerService } from 'src/match-manager/match-manager.service';
 import { Match } from 'src/entities/match.entity';
 import { MatchManager } from 'src/match-manager/match-manager';
 
+const prod = process.env.ENVIRONMENT == 'prod';
+
 @WebSocketGateway({
-  namespace: '/direct_messages',
+  namespace: prod ? 'back/direct_messages' : 'direct_messages',
   cors: {
     origin: '*',
   },
@@ -130,7 +132,6 @@ export class DirectMessagesGateway
 
   async pingFriendRequest(receiver: number, data: iFriendRequestWsPayload) {
     const receiverSocket = this.usersSocketId[receiver];
-    // this.logger.error('socket: ', receiverSocket);
     if (!receiverSocket) return;
     this.server.to(receiverSocket).emit('friend_request', data);
   }
@@ -142,6 +143,7 @@ export class DirectMessagesGateway
 
   async pingUserUpdate(receiver: number, user: UserDto) {
     const receiverSocket = this.usersSocketId[receiver];
+    if (!receiverSocket) return;
     return this.server.to(receiverSocket.toString()).emit('user_updated', user);
   }
 
