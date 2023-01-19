@@ -13,7 +13,7 @@ export class IntraService {
     const result = await response.json();
 
     this.logger.error('Failed to login on Intranet', {
-      body: await response.json(),
+      body: result,
     });
 
     if (result.error === 'invalid_client') {
@@ -45,7 +45,7 @@ export class IntraService {
     });
 
     if (!response.ok) {
-      this.handleIntraError(response);
+      this.handleIntraError(response.clone());
     }
 
     const result = await response.json();
